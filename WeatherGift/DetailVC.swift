@@ -1,15 +1,14 @@
 //
 //  DetailVC.swift
-//  WeatherGift
+//  WeatherGIft
 //
-//  Created by Anastasia Kyratzoglou on 10/1/19.
-//  Copyright © 2019 Anastasia Kyratzoglou. All rights reserved.
+//  Created by Anastasia on 10/11/19.
+//  Copyright © 2019 Anastasia. All rights reserved.
 //
 
 import UIKit
 
 class DetailVC: UIViewController {
-    
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var tempLabel: UILabel!
@@ -19,10 +18,9 @@ class DetailVC: UIViewController {
     var currentPage = 0
     var locationsArray = [String]()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         locationLabel.text = locationsArray[currentPage]
-        }
-    
+    }
 }
