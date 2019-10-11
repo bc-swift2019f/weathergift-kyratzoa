@@ -25,5 +25,4 @@ class DetailVC: UIViewController {
         locationLabel.text = locationsArray[currentPage]
         }
     
-
 }
