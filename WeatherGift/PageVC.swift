@@ -46,7 +46,9 @@ class PageVC: UIPageViewController {
         pageControl.currentPageIndicatorTintColor = UIColor.black
         pageControl.numberOfPages = locationsArray.count
         pageControl.currentPage = currentPage
+        pageControl.addTarget(self, action: #selector(pageControlPressed), for: .touchUpInside)
         view.addSubview(pageControl)
+        
     }
     
     func configureListButton(){
@@ -63,6 +65,7 @@ class PageVC: UIPageViewController {
     @objc func segueToLocationVC(){
         performSegue(withIdentifier: "ToListVC", sender: nil)
     }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier  == "ToListVC"{
@@ -118,4 +121,16 @@ extension PageVC: UIPageViewControllerDataSource, UIPageViewControllerDelegate{
             
         }
     }
+    
+    @objc func pageControlPressed() {
+        if let currentViewController = self.viewControllers?[0] as? DetailVC{
+            currentPage = currentViewController.currentPage
+            if pageControl.currentPage < currentPage{
+                setViewControllers([createDetailVC(forpage: pageControl.currentPage)], direction: .reverse, animated: true, completion: nil)
+            } else if pageControl.currentPage > currentPage {
+                setViewControllers([createDetailVC(forpage: pageControl.currentPage)], direction: .forward, animated: true, completion: nil)
+            }
+        }
+    }
+    
 }
