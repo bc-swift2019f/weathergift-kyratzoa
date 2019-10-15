@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5DB7279E23567B590042CD18 /* WeatherLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DB7279D23567B590042CD18 /* WeatherLocation.swift */; };
 		AE9A09E2AC0236161301F2AD /* Pods_WeatherGift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C179DA38F172AC0A12AF3BAE /* Pods_WeatherGift.framework */; };
 		B14AD8CD23441FA10085F3ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B14AD8CC23441FA10085F3ED /* AppDelegate.swift */; };
 		B14AD8D223441FA10085F3ED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B14AD8D023441FA10085F3ED /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5DB7279D23567B590042CD18 /* WeatherLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLocation.swift; sourceTree = "<group>"; };
 		87D1443C526C249B366DD068 /* Pods-WeatherGift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherGift.debug.xcconfig"; path = "Target Support Files/Pods-WeatherGift/Pods-WeatherGift.debug.xcconfig"; sourceTree = "<group>"; };
 		A3E9C2BE528CDBBA86581E56 /* Pods-WeatherGift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeatherGift.release.xcconfig"; path = "Target Support Files/Pods-WeatherGift/Pods-WeatherGift.release.xcconfig"; sourceTree = "<group>"; };
 		B14AD8C923441FA10085F3ED /* WeatherGift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherGift.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,7 +60,6 @@
 				87D1443C526C249B366DD068 /* Pods-WeatherGift.debug.xcconfig */,
 				A3E9C2BE528CDBBA86581E56 /* Pods-WeatherGift.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -87,6 +88,7 @@
 				B14AD8DE234420C70085F3ED /* DetailVC.swift */,
 				B14AD8E023442BAA0085F3ED /* ListVC.swift */,
 				B14AD8E423442DC70085F3ED /* PageVC.swift */,
+				5DB7279D23567B590042CD18 /* WeatherLocation.swift */,
 				B14AD8D023441FA10085F3ED /* Main.storyboard */,
 				B14AD8D323441FA30085F3ED /* Assets.xcassets */,
 				B14AD8D523441FA30085F3ED /* LaunchScreen.storyboard */,
@@ -228,6 +230,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5DB7279E23567B590042CD18 /* WeatherLocation.swift in Sources */,
 				B14AD8E123442BAA0085F3ED /* ListVC.swift in Sources */,
 				B14AD8E523442DC70085F3ED /* PageVC.swift in Sources */,
 				B14AD8CD23441FA10085F3ED /* AppDelegate.swift in Sources */,
