@@ -38,10 +38,8 @@
   [super viewDidLoad];
 
   _acViewController = [[GMSAutocompleteResultsViewController alloc] init];
-  [_acViewController
-      setAutocompleteBoundsUsingNorthEastCorner:self.autocompleteBoundsNorthEastCorner
-                                SouthWestCorner:self.autocompleteBoundsSouthWestCorner];
   _acViewController.autocompleteBoundsMode = self.autocompleteBoundsMode;
+  _acViewController.autocompleteBounds = self.autocompleteBounds;
   _acViewController.autocompleteFilter = self.autocompleteFilter;
   _acViewController.placeFields = self.placeFields;
   _acViewController.delegate = self;

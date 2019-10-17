@@ -84,25 +84,25 @@ static CGFloat kEdgeBuffer = 8;
  */
 - (void)showDemo:(Demo *)demo {
   GMSAutocompleteBoundsMode boundsMode = kGMSAutocompleteBoundsModeBias;
-  CLLocationCoordinate2D northEast = kCLLocationCoordinate2DInvalid;
-  CLLocationCoordinate2D southWest = kCLLocationCoordinate2DInvalid;
+  GMSCoordinateBounds *bounds;
 
   // Check for restriction bounds settings.
   if (_restrictionBoundsMap[@"Kansas"].on) {
     boundsMode = kGMSAutocompleteBoundsModeRestrict;
-    northEast = CLLocationCoordinate2DMake(39.0, -95.0);
-    southWest = CLLocationCoordinate2DMake(37.5, -100.0);
+    CLLocationCoordinate2D northEast = CLLocationCoordinate2DMake(39.0, -95.0);
+    CLLocationCoordinate2D southWest = CLLocationCoordinate2DMake(37.5, -100.0);
+    bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:northEast coordinate:southWest];
   } else if (_restrictionBoundsMap[@"Canada"].on) {
     boundsMode = kGMSAutocompleteBoundsModeRestrict;
-    northEast = CLLocationCoordinate2DMake(70.0, -60.0);
-    southWest = CLLocationCoordinate2DMake(50.0, -140.0);
+    CLLocationCoordinate2D northEast = CLLocationCoordinate2DMake(70.0, -60.0);
+    CLLocationCoordinate2D southWest = CLLocationCoordinate2DMake(50.0, -140.0);
+    bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:northEast coordinate:southWest];
   }
 
   // Create view controller with the autocomplete filters, bounds and selected place fields.
   UIViewController *viewController =
       [demo createViewControllerWithAutocompleteBoundsMode:boundsMode
-                         autocompleteBoundsNorthEastCorner:northEast
-                         autocompleteBoundsSouthWestCorner:southWest
+                                        autocompleteBounds:bounds
                                         autocompleteFilter:[self autcompleteFilter]
                                                placeFields:[self selectedPlaceFields]];
   [self.navigationController pushViewController:viewController animated:YES];
@@ -145,7 +145,7 @@ static CGFloat kEdgeBuffer = 8;
 
   // Set up the individual place fields that we can request.
   _nextSelectionYPos += kSelectionHeight;
-  for (NSUInteger placeField = GMSPlaceFieldName; placeField <= GMSPlaceFieldUTCOffsetMinutes;
+  for (NSUInteger placeField = GMSPlaceFieldName; placeField <= GMSPlaceFieldUserRatingsTotal;
        placeField <<= 1) {
     [scrollView addSubview:[self selectionButtonForPlaceField:(GMSPlaceField)placeField]];
   }
@@ -233,7 +233,6 @@ static CGFloat kEdgeBuffer = 8;
     @(GMSPlaceFieldViewport) : @"Viewport",
     @(GMSPlaceFieldAddressComponents) : @"Address Components",
     @(GMSPlaceFieldPhotos) : @"Photos",
-    @(GMSPlaceFieldUTCOffsetMinutes) : @"UTC Offset Minutes",
   };
   UIButton *selectionButton = [self selectionButtonForTitle:fieldsMapping[@(placeField)]];
   UISwitch *selectionSwitch = [self switchFromButton:selectionButton];
@@ -399,7 +398,7 @@ static CGFloat kEdgeBuffer = 8;
   NSString *titleFormat = NSLocalizedString(
       @"App.NameAndVersion", @"The name of the app to display in a navigation bar along with a "
                              @"placeholder for the SDK version number");
-  return [NSString stringWithFormat:titleFormat, [GMSPlacesClient SDKLongVersion]];
+  return [NSString stringWithFormat:titleFormat, [GMSPlacesClient SDKVersion]];
 }
 
 #pragma mark - Handle Orientation Changes
