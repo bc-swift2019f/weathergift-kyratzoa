@@ -23,7 +23,11 @@ class DetailVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        updateUserInterface()
+        if currentPage != 0{
+            self.locationsArray[currentPage].getWeather {
+                self.updateUserInterface()
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -36,6 +40,9 @@ class DetailVC: UIViewController {
     func updateUserInterface(){
         dateLabel.text = locationsArray[currentPage].coordinates
         locationLabel.text = locationsArray[currentPage].name
+        summaryLabel.text = locationsArray[currentPage].dailySummary
+        tempLabel.text = locationsArray[currentPage].currentTemp
+        currentImage.image = UIImage(named: locationsArray[currentPage].currentIcon)
     }
     
 }
@@ -45,8 +52,6 @@ extension DetailVC: CLLocationManagerDelegate{
     func getLocation(){
         locationManager = CLLocationManager()
         locationManager.delegate = self
-        let status = CLLocationManager.authorizationStatus()
-        handleLocationAuthorizationStatus(status: status)
     }
     
     func handleLocationAuthorizationStatus(status: CLAuthorizationStatus){
@@ -74,9 +79,9 @@ extension DetailVC: CLLocationManagerDelegate{
         currentLocation = locations.last
         let currentLatitude = currentLocation.coordinate.latitude
         let currentLongitude = currentLocation.coordinate.longitude
-        let currentCoordinates = "\(currentLatitude), \(currentLongitude)"
-        print(currentCoordinates)
+        let currentCoordinates = "\(currentLatitude),\(currentLongitude)"
         dateLabel.text = currentCoordinates
+        
         
         geoCoder.reverseGeocodeLocation(currentLocation, completionHandler: {
             placemarks, error in
@@ -89,7 +94,9 @@ extension DetailVC: CLLocationManagerDelegate{
             }
             self.locationsArray[0].name = place
             self.locationsArray[0].coordinates = currentCoordinates
-            self.updateUserInterface()
+            self.locationsArray[0].getWeather {
+              self.updateUserInterface()
+            }
         })
     }
     
