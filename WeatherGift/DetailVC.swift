@@ -15,6 +15,8 @@ class DetailVC: UIViewController {
     @IBOutlet weak var tempLabel: UILabel!
     @IBOutlet weak var summaryLabel: UILabel!
     @IBOutlet weak var currentImage: UIImageView!
+    @IBOutlet weak var tableView: UITableView!
+    
     
     var currentPage = 0
     var locationsArray = [WeatherLocation]()
@@ -23,6 +25,8 @@ class DetailVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.delegate = self
+        tableView.dataSource = self
         if currentPage != 0{
             self.locationsArray[currentPage].getWeather {
                 self.updateUserInterface()
@@ -38,13 +42,25 @@ class DetailVC: UIViewController {
     }
     
     func updateUserInterface(){
-        dateLabel.text = locationsArray[currentPage].coordinates
-        locationLabel.text = locationsArray[currentPage].name
-        summaryLabel.text = locationsArray[currentPage].dailySummary
-        tempLabel.text = locationsArray[currentPage].currentTemp
-        currentImage.image = UIImage(named: locationsArray[currentPage].currentIcon)
+        let location = locationsArray[currentPage]
+        locationLabel.text = location.name
+        let dateString = formatTimeForTimeZone(unixDate: location.currentTime, timeZone: location.timeZone)
+        dateLabel.text = dateString
+        summaryLabel.text = location.dailySummary
+        tempLabel.text = location.currentTemp
+        currentImage.image = UIImage(named: location.currentIcon)
+
     }
     
+    func formatTimeForTimeZone(unixDate: TimeInterval, timeZone: String) -> String{
+        let usableDate = Date(timeIntervalSince1970: unixDate)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE, MMM dd, y"
+        
+        dateFormatter.timeZone = TimeZone(identifier: timeZone)
+        let dateString = dateFormatter.string(from: usableDate)
+        return dateString
+    }
 }
 
 extension DetailVC: CLLocationManagerDelegate{
@@ -80,7 +96,6 @@ extension DetailVC: CLLocationManagerDelegate{
         let currentLatitude = currentLocation.coordinate.latitude
         let currentLongitude = currentLocation.coordinate.longitude
         let currentCoordinates = "\(currentLatitude),\(currentLongitude)"
-        dateLabel.text = currentCoordinates
         
         
         geoCoder.reverseGeocodeLocation(currentLocation, completionHandler: {
@@ -103,4 +118,19 @@ extension DetailVC: CLLocationManagerDelegate{
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Failed to get user location.")
     }
+}
+
+extension DetailVC: UITableViewDelegate, UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 7
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DayWeatherCell", for: indexPath)
+        return cell
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
+    
 }
