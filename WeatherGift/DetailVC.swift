@@ -23,6 +23,7 @@ class DetailVC: UIViewController {
     @IBOutlet weak var summaryLabel: UILabel!
     @IBOutlet weak var currentImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     
     var currentPage = 0
@@ -34,6 +35,8 @@ class DetailVC: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        collectionView.dataSource = self
+        collectionView.delegate = self
         if currentPage != 0{
             self.locationsArray[currentPage].getWeather {
                 self.updateUserInterface()
@@ -59,17 +62,8 @@ class DetailVC: UIViewController {
         currentImage.image = UIImage(named: location.currentIcon)
 
         tableView.reloadData()
+        collectionView.reloadData()
     }
-    
-//    func formatTimeForTimeZone(unixDate: TimeInterval, timeZone: String) -> String{
-//        let usableDate = Date(timeIntervalSince1970: unixDate)
-//        //let dateFormatter = DateFormatter()
-//        //dateFormatter.dateFormat = "EEEE, MMM dd, y"
-//        
-//        dateFormatter.timeZone = TimeZone(identifier: timeZone)
-//        let dateString = dateFormatter.string(from: usableDate)
-//        return dateString
-//    }
 }
 
 extension DetailVC: CLLocationManagerDelegate{
@@ -145,5 +139,21 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
+    
+}
+
+extension DetailVC: UICollectionViewDelegate, UICollectionViewDataSource{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return locationsArray[currentPage].hourlyForecastArray.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let hourlyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCell", for: indexPath) as! HourlyWeatherCell
+        let hourlyForecast = locationsArray[currentPage].hourlyForecastArray[indexPath.row]
+        let timeZone = locationsArray[currentPage].timeZone
+        hourlyCell.update(with: hourlyForecast, timeZone: timeZone)
+        return hourlyCell
+    }
+    
     
 }
