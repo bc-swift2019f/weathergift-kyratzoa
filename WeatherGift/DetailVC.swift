@@ -67,6 +67,13 @@ class DetailVC: UIViewController {
         tableView.reloadData()
         collectionView.reloadData()
     }
+    
+    func showAlert(title: String, message:String){
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(alertAction)
+        present(alertController, animated: true, completion: nil)
+    }
 }
 
 extension DetailVC: CLLocationManagerDelegate{
@@ -83,10 +90,24 @@ extension DetailVC: CLLocationManagerDelegate{
         case .authorizedWhenInUse,.authorizedAlways:
             locationManager.requestLocation()
         case .denied:
-            print("I'm sorry, cannot show location, user has not authorized it")
+            showAlertToPrivacySettings(title: "User has not authorized location services.", message: "Select Settings below to open device open device settings and enable location services for this app.")
         case .restricted:
-            print("Access denied.")
+            showAlert(title: "Location Services denied", message: "It may be that parental controls are restricting location use on this app.")
         }
+    }
+    
+    func showAlertToPrivacySettings(title: String, message:String){
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else{
+            return
+        }
+        let settingAction = UIAlertAction(title: "Settings", style: .default) { value in
+            UIApplication.shared.open(settingsURL, options: [:], completionHandler: nil)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(settingAction)
+        alertController.addAction(cancelAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
